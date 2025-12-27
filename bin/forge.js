@@ -58,7 +58,15 @@ async function main() {
     console.error('Provide source via --code "..." or --file file.sf');
     process.exit(1);
   }
-  const signature = { in: args.inSig.length ? args.inSig : ['int','int'], out: args.outSig.length ? args.outSig : ['int'] };
+  const signature = { 
+    in: args.inSig, 
+    out: args.outSig.length ? args.outSig : ['int'] 
+  };
+  // Apply defaults if no --sig provided at all
+  if (!process.argv.includes('--sig')) {
+    signature.in = ['int', 'int'];
+    signature.out = ['int'];
+  }
   if (args.cmd === 'wasm') {
     try {
       const wat = emitWAT(args.source, signature);

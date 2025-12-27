@@ -1,0 +1,24 @@
+{
+  "name": "Nuclear Reactor Safety Interlock",
+  "description": "Emergency shutdown logic for nuclear reactor control",
+  "inputs": [
+    "core_temp (°C)",
+    "coolant_pressure (PSI)",
+    "neutron_flux (%)"
+  ],
+  "output": "emergency_shutdown (bool: 0=safe, 1=shutdown)",
+  "fixedCode": "120 > swap 1500 > or swap 350 > or",
+  "outputType": "bool",
+  "safetyLimits": {
+    "temp_max": 350,
+    "pressure_max": 1500,
+    "flux_max": 120
+  },
+  "requirements": [
+    "Shutdown if core temperature exceeds 350°C",
+    "Shutdown if coolant pressure exceeds 1500 PSI",
+    "Shutdown if neutron flux exceeds 120%",
+    "Must be deterministic and crash-proof",
+    "Execution time must be bounded and predictable"
+  ]
+}

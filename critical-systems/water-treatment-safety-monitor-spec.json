@@ -1,0 +1,25 @@
+{
+  "name": "Water Treatment Safety Monitor",
+  "description": "Chemical dosing and contamination detection",
+  "inputs": [
+    "chlorine_ppm",
+    "pH_level",
+    "turbidity_NTU"
+  ],
+  "output": "alarm_state (bool: 0=safe, 1=alarm)",
+  "fixedCode": "5 > swap dup 65 < swap 85 > or swap or swap dup 1 < swap 4 > or swap or",
+  "safetyLimits": {
+    "chlorine_min": 1,
+    "chlorine_max": 4,
+    "pH_min": 65,
+    "pH_max": 85,
+    "turbidity_max": 5
+  },
+  "outputType": "bool",
+  "requirements": [
+    "Alarm if chlorine outside 1-4 ppm range",
+    "Alarm if pH outside 6.5-8.5 range",
+    "Alarm if turbidity exceeds 5 NTU",
+    "Public health depends on correct operation"
+  ]
+}

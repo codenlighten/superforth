@@ -158,7 +158,7 @@ async function selfHost(goal) {
 
 // Example goals for self-improvement
 const IMPROVEMENT_GOALS = {
-  optimize: "Optimize the stack analyzer for better performance without changing behavior",
+  optimize: "Optimize for performance: cache repeated lookups, use faster array methods, reduce allocations. Do NOT change any logic or behavior.",
   comments: "Add more detailed inline comments explaining the verification algorithm",
   errors: "Improve error messages to be more helpful for developers",
   refactor: "Refactor code for better readability while maintaining all functionality",

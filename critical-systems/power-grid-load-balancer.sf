@@ -1,0 +1,1 @@
+over over swap 100 * swap 95 * > if drop drop 1 0 > else swap - 100 < then
