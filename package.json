@@ -29,6 +29,7 @@
     "basic": "node examples/basic-convergence.js",
     "consciousness": "node examples/test-consciousness.js",
     "forge": "node bin/forge.js",
+    "verify": "node bin/verify-artifact.js",
     "self-host": "node examples/self-hosting-loop.js",
     "critical": "node examples/critical-infrastructure.js"
   }
