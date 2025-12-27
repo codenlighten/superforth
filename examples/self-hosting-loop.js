@@ -1,11 +1,15 @@
 #!/usr/bin/env node
 // Self-hosting loop: AI improves the compiler with verification
 import 'dotenv/config';
-import { converge } from '../index.js';
+import OpenAI from 'openai';
 import { tryCompile } from '../lib/superforth/compiler.js';
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const COMPILER_PATH = './lib/superforth/compiler.js';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const COMPILER_PATH = path.join(__dirname, '..', 'lib', 'superforth', 'compiler.js');
 
 async function generateCompilerImprovement(currentCompiler, goal) {
   console.log('\n🔄 AI-COMPILER SELF-HOSTING LOOP');
@@ -13,37 +17,32 @@ async function generateCompilerImprovement(currentCompiler, goal) {
   console.log(`Goal: ${goal}`);
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
-  const systemPrompt = `You are a compiler engineer working on SuperForth.
-Current compiler source code is provided below.
+  const prompt = `You are improving a SuperForth compiler. Task: ${goal}
 
-Your task: ${goal}
+CRITICAL RULES:
+1. Output ONLY valid JavaScript code
+2. NO markdown, NO explanations, NO commentary
+3. Start with "// Super-Forth" 
+4. End with the tryCompile export
+5. Preserve ALL exports: compile, tryCompile, CompileError
 
-Requirements:
-1. Preserve all existing functionality
-2. Maintain the same exports and API
-3. Keep static verification guarantees
-4. Add clear comments explaining changes
-5. Return ONLY the complete, modified compiler.js code
-6. Do not use markdown code blocks - return raw JavaScript
-
-Current compiler:
+Current compiler.js:
+\`\`\`
 ${currentCompiler}
+\`\`\`
 
-Return the complete improved compiler.js file.`;
+Output the complete improved compiler code:`;
 
-  const result = await converge(systemPrompt, {
-    agentA: "Compiler Expert - Propose improvements maintaining correctness",
-    agentB: "Verification Engineer - Ensure changes preserve guarantees",
-    maxIterations: 5,
-    temperature: 0.2,
-    requireBothAgents: true,
+  const response = await openai.chat.completions.create({
+    model: "gpt-4",
+    messages: [
+      { role: "system", content: "You are a code generator. Output only code, no explanations." },
+      { role: "user", content: prompt }
+    ],
+    temperature: 0.1,
   });
 
-  if (!result.converged) {
-    throw new Error('AI did not converge on compiler improvement');
-  }
-
-  return result.finalResponse.response;
+  return response.choices[0].message.content;
 }
 
 function validateCompilerAPI(code) {
@@ -55,22 +54,24 @@ function validateCompilerAPI(code) {
     }
   }
   
-  // Basic syntax check
-  try {
-    new Function(code);
-  } catch (e) {
-    throw new Error(`Syntax error in generated code: ${e.message}`);
+  // Basic checks for valid structure
+  if (!code.includes('function analyzeTokens')) {
+    throw new Error('Missing core function: analyzeTokens');
+  }
+  if (!code.includes('export class CompileError')) {
+    throw new Error('Missing CompileError class');
   }
 }
 
 async function testCompiler(compilerCode) {
   // Write to temporary file
-  const tempPath = './lib/superforth/compiler.test-new.js';
+  const tempPath = path.join(__dirname, '..', 'lib', 'superforth', 'compiler.test-new.js');
   fs.writeFileSync(tempPath, compilerCode, 'utf8');
   
   try {
-    // Dynamic import
-    const testCompiler = await import(tempPath + '?t=' + Date.now());
+    // Dynamic import with absolute path
+    const absolutePath = new URL('file://' + tempPath.replace(/\\/g, '/') + '?t=' + Date.now()).href;
+    const testCompiler = await import(absolutePath);
     
     // Run test cases
     const testCases = [
