@@ -73,6 +73,28 @@ const CONTROL_SYSTEMS = {
       "Alarm if turbidity exceeds 5 NTU",
       "Public health depends on correct operation"
     ]
+  },
+
+  defense: {
+    name: "Defense Facility Access Control",
+    description: "Hardened role-based access control with intrusion detection",
+    inputs: ["user_clearance_level", "required_clearance", "failed_attempts"],
+    output: "access_allowed (bool: 0=deny, 1=grant)",
+    // Deny if failed_attempts >= 3 (lockout); else grant if clearance >= required
+    fixedCode: "dup 3 >= if drop drop drop 0 0 > else drop >= then",
+    safetyLimits: {
+      min_clearance: 0,
+      max_clearance: 5,
+      lockout_threshold: 3
+    },
+    outputType: 'bool',
+    requirements: [
+      "Grant access only if user clearance >= required clearance",
+      "Deny access if failed login attempts >= 3 (account lockout)",
+      "No time-based bypass or exception handling",
+      "Must be crash-proof and deterministic",
+      "Execution must complete in < 100 microseconds"
+    ]
   }
 };
 
@@ -243,6 +265,11 @@ async function runSampleScenarios(systemSpec, code) {
     scenarios.push({ name: 'Chlorine High', args: [5,70,2], expect: 1 });
     scenarios.push({ name: 'pH Low', args: [2,60,2], expect: 1 });
     scenarios.push({ name: 'Turbidity High', args: [2,70,6], expect: 1 });
+  } else if (systemSpec.name.includes('Defense')) {
+    scenarios.push({ name: 'Access Granted (Secret/Secret, 0 fails)', args: [3,3,0], expect: 1 });
+    scenarios.push({ name: 'Access Denied (Unclassified/Secret)', args: [1,3,0], expect: 0 });
+    scenarios.push({ name: 'Lockout (Top Secret, 3 failures)', args: [5,5,3], expect: 0 });
+    scenarios.push({ name: 'Access Granted (Top Secret/Confidential, 1 fail)', args: [5,2,1], expect: 1 });
   }
 
   console.log('\n🧪 Sample audited runs:');
