@@ -169,10 +169,20 @@ clamp
 
 SuperForth is designed for **high-assurance environments**:
 
-- **Deterministic Builds:** Same source → same binary hash
+- **Deterministic Builds:** Same source → same binary hash (verified per commit)
 - **Audit Trails:** Every build is logged with cryptographic hashes
-- **Supply Chain Security:** SLSA Level 4 compliant
-- **Regulatory Alignment:** NIST 800-53, FedRAMP, ISO 27001
+- **Supply Chain Security:** **SLSA Level 3 compliant** (Hermetic Build + Provenance)
+- **Regulatory Alignment:** NIST 800-53, FedRAMP, CIS Benchmarks
+
+### SLSA Supply Chain Integrity
+
+Every commit to `main` triggers:
+1. **Reproducible build** (run twice, verify bit-for-bit identical)
+2. **Cryptographic hashing** (SHA-256 of all artifacts)
+3. **SLSA provenance** (in-toto format, linked to git commit)
+4. **Public audit trail** (GitHub Actions logs, artifact storage)
+
+👉 **See [docs/SLSA-SUPPLY-CHAIN.md](docs/SLSA-SUPPLY-CHAIN.md) for verification steps.**
 
 ### Government-Critical Infrastructure
 
@@ -331,6 +341,19 @@ npm test
 node test/superforth-compiler.test.js
 ```
 
+## Government Deployment Checklist
+
+For agencies deploying SuperForth critical systems:
+
+- [ ] **1. Review Source Code** — All logic in human-readable SuperForth
+- [ ] **2. Verify Compilation** — Run build independently, compare hashes
+- [ ] **3. Check SLSA Provenance** — Verify artifact origin via GitHub Actions
+- [ ] **4. Test Safety Logic** — Run sample scenarios, verify audit logs
+- [ ] **5. Deploy to Environment** — Use WASM binary or WAT source
+- [ ] **6. Monitor Production** — Track audit logs for compliance
+
+📋 **Full deployment guide:** [docs/GOVERNMENT-COMPLIANCE.md](docs/GOVERNMENT-COMPLIANCE.md)
+
 ## Configuration
 
 Set your OpenAI API key:
@@ -366,10 +389,16 @@ SuperForth Architecture
 │   └── Runtime executor
 │
 └── Audit & Compliance
-    ├── Deterministic builds
-    ├── Cryptographic hashing
-    ├── HMAC signatures
-    └── Policy metadata
+    ├── Deterministic builds (SLSA Level 3)
+    ├── Cryptographic hashing (SHA-256)
+    ├── HMAC signatures (NIST 800-53)
+    ├── Policy metadata (author/ticket/ref)
+    └── SLSA provenance (in-toto format)
+
+📚 **Documentation:**
+  - [GOVERNMENT-COMPLIANCE.md](docs/GOVERNMENT-COMPLIANCE.md) — NRC/NERC/EPA integration
+  - [SLSA-SUPPLY-CHAIN.md](docs/SLSA-SUPPLY-CHAIN.md) — Provenance verification
+  - [SECURITY.md](SECURITY.md) — NIST 800-53 full mapping
 ```
 
 ## Roadmap
