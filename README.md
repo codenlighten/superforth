@@ -32,6 +32,9 @@ npm run forge -- wasm-run --code "dup * swap dup * +" --sig "int int -- int" --a
 
 # Let AI generate verified code
 npm run ai-loop
+
+# Self-hosting: AI improves its own compiler
+npm run self-host comments
 ```
 
 ## The AI-Compiler Loop
@@ -211,6 +214,7 @@ console.log(`Result: ${result.finalResponse.response}`);
 ## Project Examples
 
 - **[AI-Compiler Loop](examples/ai-compiler-loop.js)** - Self-correcting code generation
+- **[Self-Hosting Loop](examples/self-hosting-loop.js)** - AI improves its own compiler
 - **[Basic Convergence](examples/basic-convergence.js)** - Dual-agent deliberation
 - **[Code Critique](examples/test-code-critique.js)** - Adversarial code review
 - **[Consciousness Test](examples/test-consciousness.js)** - Hard problem convergence

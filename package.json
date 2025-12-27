@@ -28,6 +28,7 @@
     "ai-loop": "node examples/ai-compiler-loop.js",
     "basic": "node examples/basic-convergence.js",
     "consciousness": "node examples/test-consciousness.js",
-    "forge": "node bin/forge.js"
+    "forge": "node bin/forge.js",
+    "self-host": "node examples/self-hosting-loop.js"
   }
 }
