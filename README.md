@@ -86,23 +86,25 @@ dup * swap dup * + dup 100 > if drop 100 then
 - **Enforcement:** Static analysis ensures type safety
 - **Signatures:** `input input ... -- output output ...`
 
-## CLI: `forge`
+## CLI Tools
+
+### `forge` - Compiler & Execution
 
 The `forge` CLI provides verification, compilation, and execution:
 
-### Verify Programs
+#### Verify Programs
 
 ```bash
 node bin/forge.js verify --code "dup dup * swap +" --sig "int int -- int"
 ```
 
-### Compile to WebAssembly Text (WAT)
+#### Compile to WebAssembly Text (WAT)
 
 ```bash
 node bin/forge.js wasm --code "min" --sig "int int -- int" --out program.wat
 ```
 
-### Run as WebAssembly
+#### Run as WebAssembly
 
 ```bash
 node bin/forge.js wasm-run \
@@ -113,7 +115,7 @@ node bin/forge.js wasm-run \
 # Output: Result: 10
 ```
 
-### Audit Logging (Government-Grade)
+#### Audit Logging (Government-Grade)
 
 ```bash
 node bin/forge.js wasm-run \
@@ -135,6 +137,39 @@ node bin/forge.js wasm-run \
 - Full normalized WAT for reproducibility
 
 See [SECURITY.md](SECURITY.md) for compliance details.
+
+### `verify-artifact` - Independent Regulatory Verification ⭐ **NEW**
+
+For government agencies to independently verify any deployed artifact:
+
+```bash
+# Verify nuclear safety logic
+npm run verify -- critical-systems/nuclear-reactor-safety-interlock.sf logs/build-xxxxx.json
+
+# Check compliance with specific framework
+npm run verify -- critical-systems/nuclear.sf logs/build-xxxxx.json \
+  --compliance "NRC 10 CFR 50"
+
+# Generate JSON report for regulatory filing
+npm run verify -- power-grid.sf logs/build-xxxxx.json \
+  --compliance "NERC CIP-005" \
+  --json > compliance-report.json
+```
+
+**Verification includes:**
+- ✅ Source code integrity against audit log
+- ✅ Build hash validation
+- ✅ Timestamp verification
+- ✅ Policy metadata checks
+- ✅ Toolchain documentation
+- ✅ Regulatory compliance mapping (NRC, NERC, EPA, DoD)
+- ✅ Offline-capable (no external APIs needed)
+
+**Supported Frameworks:**
+- NRC 10 CFR 50 (Nuclear Reactor Safety)
+- NERC CIP-005 (Power Grid Protection)
+- EPA 40 CFR 141 (Water Treatment)
+- FIPS 140-2 Level 3 (Defense Systems)
 
 ## Examples
 
