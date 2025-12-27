@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-12-27T11:33:51.091Z",
+  "command": "wasm-run",
+  "inputs": {
+    "source": "dup * swap dup * + dup 100 > if drop 100 then",
+    "signature": {
+      "in": [
+        "int",
+        "int"
+      ],
+      "out": [
+        "int"
+      ]
+    },
+    "runArgs": [
+      10,
+      10
+    ]
+  },
+  "outputs": {
+    "watHash": "f0caef6c9d8a09d206b6ac0fd601befcfed51195503acc01c964fe81fbec7f27",
+    "wasmHash": "a91f81d3da12c6a905d26467ff817c9b541685966f64f265ff1f8b76e52beedc",
+    "result": 100,
+    "outFiles": {
+      "wasm": "out/program.wasm"
+    }
+  },
+  "buildHash": "dc5cb923975801114154731ff24db630157d83227cfd36e8cde360e19dda9503",
+  "normalizedWAT": ";; Super-Forth WAT generated module\n(module\n  (memory (export \"mem\") 1)\n  (global $sp (mut i32) (i32.const 0))\n  (func $push (param $v i32)\n    global.get $sp\n    i32.const 4\n    i32.mul\n    local.get $v\n    i32.store\n    global.get $sp\n    i32.const 1\n    i32.add\n    global.set $sp\n  )\n  (func $pop (result i32)\n    (local $idx i32)\n    global.get $sp\n    i32.const 1\n    i32.sub\n    local.set $idx\n    local.get $idx\n    i32.const 4\n    i32.mul\n    i32.load\n    local.get $idx\n    global.set $sp\n  )\n  (func $peek (result i32)\n    global.get $sp\n    i32.const 1\n    i32.sub\n    i32.const 4\n    i32.mul\n    i32.load\n  )\n  (func $peek2 (result i32)\n    global.get $sp\n    i32.const 2\n    i32.sub\n    i32.const 4\n    i32.mul\n    i32.load\n  )\n  (func $main (param $p0 i32) (param $p1 i32) (result i32)\n    (local $t0 i32)\n    (local $t1 i32)\n    (local $t2 i32)\n    ;; init stack with params in order\n    local.get $p0\n    call $push\n    local.get $p1\n    call $push\n    call $peek\n    call $push\n    call $pop\n    local.set $t0\n    call $pop\n    local.set $t1\n    local.get $t1\n    local.get $t0\n    i32.mul\n    call $push\n    call $pop\n    local.set $t0\n    call $pop\n    local.set $t1\n    local.get $t0\n    call $push\n    local.get $t1\n    call $push\n    call $peek\n    call $push\n    call $pop\n    local.set $t0\n    call $pop\n    local.set $t1\n    local.get $t1\n    local.get $t0\n    i32.mul\n    call $push\n    call $pop\n    local.set $t0\n    call $pop\n    local.set $t1\n    local.get $t1\n    local.get $t0\n    i32.add\n    call $push\n    call $peek\n    call $push\n    i32.const 100\n    call $push\n    call $pop\n    local.set $t0\n    call $pop\n    local.set $t1\n    local.get $t1\n    local.get $t0\n    i32.gt_s\n    call $push\n    call $pop\n    (if\n      (then\n    call $pop\n    drop\n    i32.const 100\n    call $push\n      )\n      (else\n      )\n    )\n    ;; return top of stack\n    call $pop\n  )\n  (export \"main\" (func $main))\n)"
+}

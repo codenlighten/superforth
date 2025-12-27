@@ -4,6 +4,7 @@
  * Shows simple usage of the convergence engine
  */
 
+import 'dotenv/config';
 import { converge } from '../index.js';
 
 async function main() {

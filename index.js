@@ -11,6 +11,12 @@
  */
 
 import OpenAI from 'openai';
+import { 
+  createMemoryState, 
+  createInteraction, 
+  applyRollingMemoryUpdate,
+  buildContextString 
+} from './lib/rollingMemory.js';
 
 // Agent response schema for structured output
 const baseAgentResponseSchema = {
@@ -34,7 +40,8 @@ const baseAgentResponseSchema = {
       description: "Your confidence level (0-100)"
     }
   },
-  required: ["response", "continue", "missingContext", "confidence"]
+  required: ["response", "continue", "missingContext", "confidence"],
+  additionalProperties: false
 };
 
 /**
@@ -46,7 +53,8 @@ async function queryOpenAI(prompt, options = {}) {
     schema = baseAgentResponseSchema,
     temperature = 0.3,
     apiKey = process.env.OPENAI_API_KEY,
-    model = 'gpt-4o-2024-08-06'
+    model = 'gpt-4o-2024-08-06',
+    systemPrompt = 'You are participating in a convergence deliberation. Provide thorough analysis and clearly indicate if more work is needed.'
   } = options;
 
   if (!apiKey) {
@@ -60,7 +68,7 @@ async function queryOpenAI(prompt, options = {}) {
     messages: [
       {
         role: 'system',
-        content: 'You are participating in a convergence deliberation. Provide thorough analysis and clearly indicate if more work is needed.'
+        content: systemPrompt
       },
       {
         role: 'user',
@@ -127,6 +135,8 @@ export function getConvergenceScore(agentResponse) {
  * @param {number} [options.temperature=0.3] - Temperature for queries
  * @param {string} [options.openaiApiKey] - OpenAI API key
  * @param {string} [options.model] - OpenAI model to use
+ * @param {boolean} [options.requireBothAgents=true] - If true, both agents must participate in each iteration (recommended)
+ * @param {boolean} [options.useMemory=true] - Use rolling memory to manage long conversations
  * @returns {Promise<Object>} Final converged result with full conversation history
  */
 export async function converge(initialQuery, options = {}) {
@@ -137,10 +147,14 @@ export async function converge(initialQuery, options = {}) {
     onIteration = null,
     temperature = 0.3,
     openaiApiKey = process.env.OPENAI_API_KEY,
-    model = 'gpt-4o-2024-08-06'
+    model = 'gpt-4o-2024-08-06',
+    requireBothAgents = true,  // Default: always ensure adversarial review
+    useMemory = true,  // Default: use rolling memory for long conversations
+    systemPrompt
   } = options;
   
   const conversation = [];
+  const memoryState = useMemory ? createMemoryState() : null;
   let currentContext = {
     originalQuery: initialQuery,
     iteration: 0
@@ -158,6 +172,11 @@ export async function converge(initialQuery, options = {}) {
   for (let i = 0; i < maxIterations; i++) {
     currentContext.iteration = i + 1;
     
+    // Build memory context if enabled
+    if (useMemory && memoryState) {
+      currentContext.memoryContext = buildContextString(memoryState);
+    }
+    
     // Agent A's turn
     console.log(`\n🔵 Agent A - Iteration ${i + 1}`);
     console.log('─'.repeat(80));
@@ -171,7 +190,8 @@ export async function converge(initialQuery, options = {}) {
       schema: baseAgentResponseSchema,
       temperature,
       apiKey: openaiApiKey,
-      model
+      model,
+      systemPrompt
     });
     
     const scoreA = getConvergenceScore(agentAResponse);
@@ -186,8 +206,21 @@ export async function converge(initialQuery, options = {}) {
       response: agentAResponse
     });
     
-    // Check convergence
-    if (hasConverged(agentAResponse)) {
+    // Add to rolling memory if enabled
+    if (useMemory && memoryState) {
+      const interaction = createInteraction('ai', agentAResponse.response, {
+        agent: 'A',
+        role: agentA,
+        iteration: i + 1,
+        continue: agentAResponse.continue,
+        confidence: agentAResponse.confidence,
+        missingContext: agentAResponse.missingContext
+      });
+      await applyRollingMemoryUpdate(memoryState, interaction, { useConvergence: false }); // Avoid circular dependency
+    }
+    
+    // Check convergence - but if requireBothAgents is true, always let Agent B review
+    if (hasConverged(agentAResponse) && !requireBothAgents) {
       console.log('\n🎉 SINGULARITY REACHED by Agent A!');
       return {
         converged: true,
@@ -204,14 +237,17 @@ export async function converge(initialQuery, options = {}) {
     console.log(`\n🟢 Agent B - Iteration ${i + 1}`);
     console.log('─'.repeat(80));
     
-    const agentBPrompt = `Review and critique this response. Find gaps, challenge assumptions, and suggest what's missing:\n\n${agentAResponse.response}`;
+    const agentBPrompt = i === 0
+      ? `Review and critique this response. Find gaps, challenge assumptions, and suggest what's missing:\n\n${agentAResponse.response}`
+      : `Review this revised response. The author addressed your previous critique (missing: ${agentBResponse.missingContext.join(', ') || 'None'}). Evaluate if the gaps are now filled, identify any remaining issues, and determine if the work is complete:\n\n${agentAResponse.response}`;
     
     agentBResponse = await queryOpenAI(agentBPrompt, {
       context: currentContext,
       schema: baseAgentResponseSchema,
       temperature,
       apiKey: openaiApiKey,
-      model
+      model,
+      systemPrompt
     });
     
     const scoreB = getConvergenceScore(agentBResponse);
@@ -225,6 +261,19 @@ export async function converge(initialQuery, options = {}) {
       role: agentB,
       response: agentBResponse
     });
+    
+    // Add to rolling memory if enabled
+    if (useMemory && memoryState) {
+      const interaction = createInteraction('ai', agentBResponse.response, {
+        agent: 'B',
+        role: agentB,
+        iteration: i + 1,
+        continue: agentBResponse.continue,
+        confidence: agentBResponse.confidence,
+        missingContext: agentBResponse.missingContext
+      });
+      await applyRollingMemoryUpdate(memoryState, interaction, { useConvergence: false });
+    }
     
     // Check convergence
     if (hasConverged(agentBResponse)) {
@@ -266,7 +315,8 @@ export async function converge(initialQuery, options = {}) {
     iterations: maxIterations,
     finalResponse: finalScore === getConvergenceScore(agentAResponse) ? agentAResponse : agentBResponse,
     conversation,
-    convergenceScore: finalScore
+    convergenceScore: finalScore,
+    memoryState: useMemory ? memoryState : undefined
   };
 }
 
@@ -282,7 +332,7 @@ export async function convergeOnCode(codeRequest, options = {}) {
     ...options,
     agentA: "Senior Software Engineer - Write clean, documented, production-ready code",
     agentB: "Code Reviewer - Find bugs, security issues, performance problems, and style violations",
-    temperature: 0.2  // Lower temp for code
+    temperature: 0.2  // Lower temp for code precision
   });
 }
 

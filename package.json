@@ -19,10 +19,15 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "openai": "^4.0.0"
+    "dotenv": "^17.2.3",
+    "openai": "^4.0.0",
+    "wabt": "^1.0.39"
   },
-  "devDependencies": {},
   "scripts": {
-    "test": "node test/test-convergence.js"
+    "test": "node test/superforth-compiler.test.js",
+    "ai-loop": "node examples/ai-compiler-loop.js",
+    "basic": "node examples/basic-convergence.js",
+    "consciousness": "node examples/test-consciousness.js",
+    "forge": "node bin/forge.js"
   }
 }

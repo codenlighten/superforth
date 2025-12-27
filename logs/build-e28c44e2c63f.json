@@ -1,0 +1,46 @@
+{
+  "timestamp": "2025-12-27T11:40:38.997Z",
+  "command": "wasm-run",
+  "inputs": {
+    "source": "min",
+    "signature": {
+      "in": [
+        "int",
+        "int"
+      ],
+      "out": [
+        "int"
+      ]
+    },
+    "runArgs": [
+      3,
+      5
+    ]
+  },
+  "outputs": {
+    "watHash": "6c5c6152d9234f503ac5f92616a81a90258a8cda99320e53b2691b7ac97c8b65",
+    "wasmHash": "0d937d727235d453ac5042c3bc5022d9fdcf84a7f3774c6f1bcd9bc741707664",
+    "result": 3,
+    "outFiles": {
+      "wasm": "out/min.wasm"
+    }
+  },
+  "buildHash": "e28c44e2c63f451c11bd468bbcf3e9c468c4381cf5f88c8d38093eaa1c549297",
+  "toolchain": {
+    "node": "v25.2.1",
+    "npm": "unknown",
+    "convergence": "1.0.0",
+    "dependencies": {
+      "dotenv": "^17.2.3",
+      "openai": "^4.0.0",
+      "wabt": "^1.0.39"
+    }
+  },
+  "policy": {
+    "author": "SecurityTeam",
+    "ticket": "GOV-2025-001",
+    "policyRef": "NIST-800-53"
+  },
+  "signature": null,
+  "normalizedWAT": ";; Super-Forth WAT generated module\n(module\n  (memory (export \"mem\") 1)\n  (global $sp (mut i32) (i32.const 0))\n  (func $push (param $v i32)\n    global.get $sp\n    i32.const 4\n    i32.mul\n    local.get $v\n    i32.store\n    global.get $sp\n    i32.const 1\n    i32.add\n    global.set $sp\n  )\n  (func $pop (result i32)\n    (local $idx i32)\n    global.get $sp\n    i32.const 1\n    i32.sub\n    local.set $idx\n    local.get $idx\n    i32.const 4\n    i32.mul\n    i32.load\n    local.get $idx\n    global.set $sp\n  )\n  (func $peek (result i32)\n    global.get $sp\n    i32.const 1\n    i32.sub\n    i32.const 4\n    i32.mul\n    i32.load\n  )\n  (func $peek2 (result i32)\n    global.get $sp\n    i32.const 2\n    i32.sub\n    i32.const 4\n    i32.mul\n    i32.load\n  )\n  (func $main (param $p0 i32) (param $p1 i32) (result i32)\n    (local $t0 i32)\n    (local $t1 i32)\n    (local $t2 i32)\n    ;; init stack with params in order\n    local.get $p0\n    call $push\n    local.get $p1\n    call $push\n    call $pop\n    local.set $t0\n    call $pop\n    local.set $t1\n    local.get $t1\n    local.get $t0\n    local.get $t1\n    local.get $t0\n    i32.le_s\n    select\n    call $push\n    ;; return top of stack\n    call $pop\n  )\n  (export \"main\" (func $main))\n)"
+}

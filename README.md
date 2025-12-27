@@ -63,6 +63,70 @@ console.log(`Score: ${result.convergenceScore}%`);
 console.log(`Result: ${result.finalResponse.response}`);
 ```
 
+### Super-Forth Compiler (AI-Mediated Assembly)
+
+This project includes a strict Super-Forth compiler and an AI-Compiler loop that produces tiny, crash-proof programs via adversarial review and static stack-effect verification.
+
+Key properties:
+- Minimal word set: `dup`, `drop`, `swap`, `over`, `+`, `-`, `*`, `/`, `>`, `<`, `<=`, `>=`, `=`, `!=`, `min`, `max`, `clamp`, integers, `if ... [else] ... then`
+- Exact stack-effect checking: branches must leave identical stacks; types are enforced (`int`, `bool`)
+- CLI: `forge` to verify programs and emit/run WASM (with optional audit logging)
+
+Quick start:
+
+```bash
+npm run forge -- --code "over over * swap * +" --sig "int int -- int"
+```
+
+AI-Compiler loop demo:
+
+```bash
+npm run ai-loop
+```
+
+Target signature for the example: `( int int -- int )`, program produced:
+
+```
+dup * swap dup * + dup 100 > if drop 100 then
+```
+
+Compiler verifies final stack effect and conditional branches, ensuring correctness before execution or emission to future targets (e.g., WebAssembly).
+
+Emit and run WebAssembly (WAT/WASM):
+
+```bash
+# Emit WAT to file
+npm run forge -- wasm --code "dup * swap dup * + dup 100 > if drop 100 then" --sig "int int -- int" --out out/program.wat
+
+# Compile and run WASM with args (writes .wasm if --out is provided)
+npm run forge -- wasm-run --code "dup * swap dup * + dup 100 > if drop 100 then" --sig "int int -- int" --args "3,4" --out out/program.wasm
+ 
+# New ops examples
+# Comparisons
+npm run forge -- wasm-run --code "3 5 < if 1 else 0 then" --sig "-- int" --out out/lt.wasm
+# min/max
+npm run forge -- wasm-run --code "3 5 min" --sig "-- int" --out out/min.wasm
+npm run forge -- wasm-run --code "3 5 max" --sig "-- int" --out out/max.wasm
+# clamp expects x lo hi on the stack (top=hi)
+npm run forge -- wasm-run --code "clamp" --sig "int int int -- int" --args "15,0,10" --out out/clamp.wasm
+
+# Auditing and determinism
+# Add `--audit` to produce a content-addressed audit log under `logs/`.
+# Logs include normalized WAT hash, WASM hash, inputs, outputs, and a build hash.
+npm run forge -- wasm-run --code "dup * swap dup * + dup 100 > if drop 100 then" --sig "int int -- int" --args "10,10" --out out/program.wasm --audit
+
+# Government-grade compliance with policy metadata
+npm run forge -- wasm-run \
+  --code "min" --sig "int int -- int" --args "3,5" \
+  --out out/min.wasm --audit \
+  --author "SecurityTeam" \
+  --ticket "GOV-2025-001" \
+  --policy-ref "NIST-800-53"
+```
+
+**For detailed security and compliance documentation, see [SECURITY.md](SECURITY.md).**
+
+
 ### Custom Agents
 
 ```javascript
