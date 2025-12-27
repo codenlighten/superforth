@@ -1,0 +1,1 @@
+dup 3 >= if drop drop drop 0 0 > else drop >= then

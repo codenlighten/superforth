@@ -1,0 +1,24 @@
+{
+  "name": "Defense Facility Access Control",
+  "description": "Hardened role-based access control with intrusion detection",
+  "inputs": [
+    "user_clearance_level",
+    "required_clearance",
+    "failed_attempts"
+  ],
+  "output": "access_allowed (bool: 0=deny, 1=grant)",
+  "fixedCode": "dup 3 >= if drop drop drop 0 0 > else drop >= then",
+  "safetyLimits": {
+    "min_clearance": 0,
+    "max_clearance": 5,
+    "lockout_threshold": 3
+  },
+  "outputType": "bool",
+  "requirements": [
+    "Grant access only if user clearance >= required clearance",
+    "Deny access if failed login attempts >= 3 (account lockout)",
+    "No time-based bypass or exception handling",
+    "Must be crash-proof and deterministic",
+    "Execution must complete in < 100 microseconds"
+  ]
+}

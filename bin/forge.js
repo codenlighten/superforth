@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { tryCompile } from '../lib/superforth/compiler.js';
 import { emitWAT } from '../lib/superforth/wasmEmitter.js';
+import VerilogEmitter from '../lib/superforth/verilogEmitter.js';
 import wabt from 'wabt';
 import { writeAuditLog } from '../lib/auditLogger.js';
 
@@ -21,7 +22,7 @@ function parseArgs(argv) {
     policy: {} 
   };
   const a = argv.slice(2);
-  if (['verify','compile','wasm','wasm-run'].includes(a[0])) args.cmd = a.shift();
+  if (['verify','compile','wasm','wasm-run','verilog'].includes(a[0])) args.cmd = a.shift();
   for (let i = 0; i < a.length; i++) {
     const t = a[i];
     if (t === '--file') args.source = fs.readFileSync(a[++i], 'utf8');
@@ -83,6 +84,49 @@ async function main() {
           signature,
           watText: wat,
           outFiles: { wat: args.outFile || null },
+          auditDir: args.auditDir,
+          policy: args.policy,
+        });
+        console.log(`Audit log: ${filePath}\nBuild hash: ${buildHash}`);
+      }
+    } catch (e) {
+      console.error('Error:', e.message);
+      process.exit(1);
+    }
+  } else if (args.cmd === 'verilog') {
+    try {
+      const res = tryCompile(args.source, signature);
+      if (!res.ok) {
+        console.error('Compilation failed:', res.error);
+        process.exit(1);
+      }
+      const emitter = new VerilogEmitter();
+      const verilog = emitter.emitModule(res.tokens, 
+        `${signature.in.join(' ')} -- ${signature.out.join(' ')}`);
+      
+      if (args.outFile) {
+        fs.writeFileSync(args.outFile, verilog, 'utf8');
+        console.log(`Wrote Verilog to ${args.outFile}`);
+      } else {
+        console.log(verilog);
+      }
+
+      // Generate timing report
+      const timing = emitter.generateTimingReport(res.tokens);
+      console.log('\n📊 Hardware Synthesis Estimates:');
+      console.log(`  Critical Path: ${timing.criticalPathDelay}`);
+      console.log(`  Max Frequency: ${timing.maxFrequency}`);
+      console.log(`  Execution: ${timing.singleCycleExecution ? 'Single cycle' : 'Pipelined'}`);
+      console.log(`  Gate Count: ~${timing.gateCount} gates`);
+
+      if (args.audit) {
+        const { filePath, buildHash } = writeAuditLog({
+          command: 'verilog',
+          source: args.source,
+          signature,
+          verilogText: verilog,
+          timing,
+          outFiles: { v: args.outFile || null },
           auditDir: args.auditDir,
           policy: args.policy,
         });
