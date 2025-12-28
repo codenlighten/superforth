@@ -1,15 +1,16 @@
-# SuperForth
+# AxiomSure
 
-> **AI-Generated, Formally Verified, Cryptographically Auditable Code**
+> **Every Artifact Locked to Its Trace**  
+> Assured by Design. Proven in Evidence.
 
-SuperForth is a minimalist stack-based language with a strict static analyzer that enables **AI to write crash-proof, government-grade code**. Every program is verified before execution, and every build is cryptographically auditable.
+AxiomSure is a minimalist stack-based language with a strict static analyzer that enables **AI to write crash-proof, government-grade code**. Every program is verified before execution, and every build is cryptographically auditable.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
 
-## Why SuperForth?
+## Why AxiomSure?
 
-Traditional AI code generation is unreliable. SuperForth changes this:
+Traditional AI code generation is unreliable. AxiomSure changes this:
 
 ✅ **Formally Verified** - Stack analyzer catches all errors at compile-time  
 ✅ **AI-Driven** - Convergence loop generates correct code automatically  
@@ -39,9 +40,9 @@ npm run self-host comments
 
 ## The AI-Compiler Loop
 
-SuperForth includes a **self-correcting AI pipeline**:
+AxiomSure includes a **self-correcting AI pipeline**:
 
-1. **AI generates** Super-Forth code based on requirements
+1. **AI generates** AxiomSure code based on requirements
 2. **Compiler verifies** stack effects and type safety
 3. **If errors exist**, feed them back to AI
 4. **AI corrects** and resubmits
@@ -202,7 +203,7 @@ clamp
 
 ## Security & Compliance
 
-SuperForth is designed for **high-assurance environments**:
+AxiomSure is designed for **high-assurance environments**:
 
 - **Deterministic Builds:** Same source → same binary hash (verified per commit)
 - **Audit Trails:** Every build is logged with cryptographic hashes
@@ -221,7 +222,7 @@ Every commit to `main` triggers:
 
 ### Government-Critical Infrastructure
 
-SuperForth powers **production safety-critical systems**:
+AxiomSure powers **production safety-critical systems**:
 
 #### Nuclear Reactor Safety Interlock
 - **Logic:** Deterministic emergency shutdown (temp>350 OR pressure>1500 OR flux>120)
@@ -242,7 +243,7 @@ SuperForth powers **production safety-critical systems**:
 
 ## Hardware Implementation (FPGA/ASIC)
 
-SuperForth compiles to **synthesizable Verilog HDL** for silicon-level deployment:
+AxiomSure compiles to **synthesizable Verilog HDL** for silicon-level deployment:
 
 ```bash
 # Generate Verilog for nuclear reactor safety
@@ -286,7 +287,7 @@ See [SECURITY.md](SECURITY.md) for compliance framework documentation.
 
 ## The Convergence Engine
 
-SuperForth is powered by a **dual-agent convergence system**:
+AxiomSure is powered by a **dual-agent convergence system**:
 
 - **Agent A** (Generator): Proposes code and analysis
 - **Agent B** (Critic): Identifies gaps and errors
@@ -335,7 +336,7 @@ node examples/critical-infrastructure.js water
 ```
 
 Each generates:
-- **SuperForth source** (human-readable logic)
+- **AxiomSure source** (human-readable logic)
 - **WAT file** (WebAssembly Text, ready for review)
 - **Spec JSON** (system parameters and requirements)
 - **Audit logs** (SHA-256 build hashes + NIST 800-53 metadata)
@@ -408,14 +409,14 @@ Specialized for architecture/design with appropriate agent roles.
 npm test
 
 # Or directly
-node test/superforth-compiler.test.js
+node test/AxiomSure-compiler.test.js
 ```
 
 ## Government Deployment Checklist
 
-For agencies deploying SuperForth critical systems:
+For agencies deploying AxiomSure critical systems:
 
-- [ ] **1. Review Source Code** — All logic in human-readable SuperForth
+- [ ] **1. Review Source Code** — All logic in human-readable AxiomSure
 - [ ] **2. Verify Compilation** — Run build independently, compare hashes
 - [ ] **3. Check SLSA Provenance** — Verify artifact origin via GitHub Actions
 - [ ] **4. Test Safety Logic** — Run sample scenarios, verify audit logs
@@ -441,7 +442,7 @@ OPENAI_API_KEY=your-key-here
 ## Architecture
 
 ```
-SuperForth Architecture
+AxiomSure Architecture
 │
 ├── AI Layer (Convergence Engine)
 │   ├── Dual-agent deliberation
@@ -480,7 +481,7 @@ SuperForth Architecture
 - [ ] Standard library (common algorithms)
 
 ### Mid-Term
-- [ ] Self-hosting (compiler written in SuperForth)
+- [ ] Self-hosting (compiler written in AxiomSure)
 - [ ] Ed25519 signatures for artifacts
 - [ ] Blockchain-anchored audit logs
 - [ ] VSCode extension with inline verification
@@ -489,11 +490,11 @@ SuperForth Architecture
 - [ ] Hardware generation (Verilog/VHDL output)
 - [ ] Smart contract platform (verified Solidity alternative)
 - [ ] Formal proof generation (Coq/Lean integration)
-- [ ] Multi-language front-ends (Python/TypeScript → SuperForth)
+- [ ] Multi-language front-ends (Python/TypeScript → AxiomSure)
 
 ## Research Applications
 
-SuperForth enables novel research in:
+AxiomSure enables novel research in:
 
 - **AI Safety:** Constrained AI with formal guarantees
 - **Compiler Theory:** Self-modifying verified compilers
@@ -517,14 +518,14 @@ MIT License - see LICENSE file for details.
 
 ## Citation
 
-If you use SuperForth in research, please cite:
+If you use AxiomSure in research, please cite:
 
 ```bibtex
-@software{superforth2025,
-  title = {SuperForth: AI-Generated Formally Verified Code with Cryptographic Audit Trails},
+@software{AxiomSure2025,
+  title = {AxiomSure: AI-Generated Formally Verified Code with Cryptographic Audit Trails},
   author = {Convergence Engine Contributors},
   year = {2025},
-  url = {https://github.com/codenlighten/superforth}
+  url = {https://github.com/codenlighten/AxiomSure}
 }
 ```
 
@@ -542,8 +543,8 @@ Inspired by:
 
 ## Contact
 
-- **Issues:** [GitHub Issues](https://github.com/codenlighten/superforth/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/codenlighten/superforth/discussions)
+- **Issues:** [GitHub Issues](https://github.com/codenlighten/AxiomSure/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/codenlighten/AxiomSure/discussions)
 - **Security:** See [SECURITY.md](SECURITY.md) for vulnerability reporting
 
 ---
