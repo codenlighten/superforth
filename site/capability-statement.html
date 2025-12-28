@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Capability Statement — SuperForth</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; upgrade-insecure-requests" />
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    .cap {max-width:840px;margin:40px auto;padding:20px;background:rgba(15,23,42,.65);border:1px solid rgba(255,255,255,.08);border-radius:14px}
+    h1,h2{margin:0 0 10px 0}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .small{color:#9bb0d3}
+    @media print{body{background:#fff;color:#000}.cap{box-shadow:none;border:0}}
+  </style>
+</head>
+<body>
+  <div class="cap">
+    <h1>Capability Statement</h1>
+    <p class="small">SuperForth — Government‑Grade Verified Control Systems</p>
+
+    <h2>Core Capabilities</h2>
+    <ul>
+      <li>Verified, stack‑typed control language (deterministic WASM + synthesizable Verilog)</li>
+      <li>Static analysis: stack‑effect/type checks; verified subset (no allocation, bounded stack)</li>
+      <li>Reproducible builds (pinned toolchain, hash‑locked manifests)</li>
+      <li>Audit logs, signatures, and in‑toto provenance</li>
+      <li>Offline verification (air‑gapped review)</li>
+    </ul>
+
+    <h2>Standards & Alignment</h2>
+    <ul>
+      <li>NRC 10 CFR 50; 10 CFR 73.54; RG 5.71; RG 1.152; RG 1.168</li>
+      <li>NERC CIP‑005‑8 (Electronic Security Perimeter(s))</li>
+      <li>EPA 40 CFR 141</li>
+      <li>FIPS 140‑3 (Level 3 target)</li>
+      <li>NIST SP 800‑53</li>
+    </ul>
+
+    <h2>Compliance Crosswalk (excerpt)</h2>
+    <table class="table" style="width:100%">
+      <thead><tr><th>Standard</th><th>Control</th><th>Artifact</th><th>Location</th></tr></thead>
+      <tbody>
+        <tr><td>NRC</td><td>10 CFR 73.54</td><td>Audit log, provenance</td><td>Evidence Pack → Audit/Provenance</td></tr>
+        <tr><td>NERC</td><td>CIP‑005‑8</td><td>Build manifest, hashes</td><td>Evidence Pack → Manifest</td></tr>
+        <tr><td>NIST</td><td>800‑53 CM‑2/CM‑6</td><td>Deterministic build config</td><td>Evidence Pack → Manifest</td></tr>
+      </tbody>
+    </table>
+
+    <div class="grid">
+      <div>
+        <h2>Assurance Model</h2>
+        <ul>
+          <li>Verified subset; total operations</li>
+          <li>Pinned toolchain; deterministic WAT</li>
+          <li>Signed audit + provenance</li>
+          <li>Offline verifier</li>
+        </ul>
+      </div>
+      <div>
+        <h2>What We Are / Are Not</h2>
+        <ul>
+          <li>We provide mappings and evidence artifacts</li>
+          <li>We are not a certification body</li>
+          <li>Final approvals by program assessors</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Contact</h2>
+    <p>greg@smartledger.solutions</p>
+  </div>
+</body>
+</html>

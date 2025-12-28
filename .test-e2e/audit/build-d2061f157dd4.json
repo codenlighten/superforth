@@ -1,0 +1,43 @@
+{
+  "timestamp": "2025-12-28T12:21:52.264Z",
+  "command": "wasm",
+  "inputs": {
+    "source": "dup *",
+    "signature": {
+      "in": [
+        "int"
+      ],
+      "out": [
+        "int"
+      ]
+    },
+    "runArgs": []
+  },
+  "outputs": {
+    "watHash": "b3309f1f72bc8aab944e7ef21e963cb60de7655461ef9a1825112ead56b9dca6",
+    "wasmHash": null,
+    "result": null,
+    "outFiles": {
+      "wat": "C:\\Users\\Coden\\OneDrive\\Documents\\dev\\convergence - Copy\\.test-e2e\\out\\square.wat"
+    }
+  },
+  "buildHash": "d2061f157dd44cec11d78e382b1268231d16f70a8efb47588166a1fc951e83b8",
+  "toolchain": {
+    "node": "v25.2.1",
+    "npm": "npm/11.6.2",
+    "convergence": "1.0.0",
+    "dependencies": {
+      "@smartledger/keys": "^1.5.10",
+      "dotenv": "^17.2.3",
+      "openai": "^4.0.0",
+      "wabt": "^1.0.39"
+    }
+  },
+  "policy": {
+    "author": "unknown",
+    "ticket": null,
+    "policyRef": null
+  },
+  "signature": null,
+  "normalizedWAT": ";; Super-Forth WAT generated module\n(module\n  (memory (export \"mem\") 1)\n  (global $sp (mut i32) (i32.const 0))\n  (func $push (param $v i32)\n    global.get $sp\n    i32.const 4\n    i32.mul\n    local.get $v\n    i32.store\n    global.get $sp\n    i32.const 1\n    i32.add\n    global.set $sp\n  )\n  (func $pop (result i32)\n    (local $idx i32)\n    global.get $sp\n    i32.const 1\n    i32.sub\n    local.set $idx\n    local.get $idx\n    i32.const 4\n    i32.mul\n    i32.load\n    local.get $idx\n    global.set $sp\n  )\n  (func $peek (result i32)\n    global.get $sp\n    i32.const 1\n    i32.sub\n    i32.const 4\n    i32.mul\n    i32.load\n  )\n  (func $peek2 (result i32)\n    global.get $sp\n    i32.const 2\n    i32.sub\n    i32.const 4\n    i32.mul\n    i32.load\n  )\n  (func $main (param $p0 i32) (result i32)\n    (local $t0 i32)\n    (local $t1 i32)\n    (local $t2 i32)\n    ;; init stack with params in order\n    local.get $p0\n    call $push\n    call $peek\n    call $push\n    call $pop\n    local.set $t0\n    call $pop\n    local.set $t1\n    local.get $t1\n    local.get $t0\n    i32.mul\n    call $push\n    ;; return top of stack\n    call $pop\n  )\n  (export \"main\" (func $main))\n)"
+}

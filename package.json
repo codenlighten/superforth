@@ -19,18 +19,26 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "@smartledger/keys": "^1.5.10",
     "dotenv": "^17.2.3",
     "openai": "^4.0.0",
     "wabt": "^1.0.39"
   },
   "scripts": {
     "test": "node test/superforth-compiler.test.js",
+    "test:signing": "node test/integration-signing-anchoring.test.js",
+    "test:e2e": "node test/e2e-forge-sign-verify.js",
     "ai-loop": "node examples/ai-compiler-loop.js",
     "basic": "node examples/basic-convergence.js",
     "consciousness": "node examples/test-consciousness.js",
     "forge": "node bin/forge.js",
     "verify": "node bin/verify-artifact.js",
     "self-host": "node examples/self-hosting-loop.js",
-    "critical": "node examples/critical-infrastructure.js"
+    "critical": "node examples/critical-infrastructure.js",
+    "start:site": "node scripts/serve-site.js",
+    "keygen": "node bin/keygen.js",
+    "sign-artifact": "node bin/sign-artifact.js",
+    "chain-anchor": "node bin/chain-anchor.js",
+    "chain-verify": "node bin/chain-verify.js"
   }
 }

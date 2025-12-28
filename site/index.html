@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SuperForth | Government‑Grade Verified Control Systems</title>
+  <meta name="description" content="AI-generated, formally verified control systems for nuclear, grid, water, and defense. Reproducible builds, Verilog synthesis, and independent regulatory verification." />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; upgrade-insecure-requests" />
+  <meta name="theme-color" content="#0b1220" />
+  <meta property="og:title" content="SuperForth — Government‑Grade Verified Control Systems" />
+  <meta property="og:description" content="Formally verified, hardware-ready control systems with offline regulatory verification." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="SuperForth" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#54d6ff"/>
+                <stop offset="100%" stop-color="#6a5cff"/>
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="6" stroke="url(#g)" stroke-width="2"/>
+            <path d="M7 12h10M12 7v10" stroke="#86f3ff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="brand-name">SuperForth</span>
+      </div>
+      <nav class="nav">
+        <a href="#capabilities">Capabilities</a>
+        <a href="#verification">Verification</a>
+        <a href="#compliance">Compliance</a>
+        <a href="#docs">Docs</a>
+        <a class="cta" href="mailto:greg@smartledger.solutions">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <h1>Reduce V&V Cost & Recertification Risk</h1>
+        <p class="subtitle">Verifiable control systems with offline audit-ready artifacts. Start with our evidence toolkit—no toolchain migration required. Deployed by defense, nuclear, and critical infrastructure programs.</p>
+        <div class="hero-ctas">
+          <a class="btn primary" href="#verifier">Start with Evidence Toolkit</a>
+          <a class="btn ghost" href="mailto:greg@smartledger.solutions">Schedule Pilot Demo</a>
+        </div>
+        <div class="trust-badges" aria-label="Regulatory frameworks readiness">
+          <span class="badge">NRC 10 CFR 50</span>
+          <span class="badge">NRC 10 CFR 73.54</span>
+          <span class="badge">NERC CIP‑005‑8</span>
+          <span class="badge">EPA 40 CFR 141</span>
+          <span class="badge">FIPS 140‑3 (L3 target)</span>
+          <span class="badge">Blockchain-Anchored</span>
+        </div>
+      </div>
+      <div class="grid-orbit" aria-hidden="true"></div>
+    </section>
+
+      <section id="demo" class="panel">
+        <div class="container two-col">
+          <div>
+            <h2>SuperForth in 10 lines</h2>
+            <div class="code"><pre><code># Threshold compare with lockout
+  # stack: attempts required clearance -> allow
+
+  dup 3 >= if      # lockout at 3+
+    drop drop drop 0
+  else
+    drop >=        # clearance >= required
+  then
+  </code></pre></div>
+          </div>
+          <div>
+            <h3>Resulting Artifacts</h3>
+            <div class="code"><pre><code>// WAT (header)
+  (module (func (param i32 i32 i32) (result i32) ...))
+
+  // Verilog (header)
+  module sf_core(
+    input  [31:0] attempts, required, clearance,
+    output [31:0] allow
+  );
+  ...
+  </code></pre></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="what" class="panel alt">
+        <div class="container two-col">
+          <div>
+            <h2>What we are</h2>
+            <ul class="feature-list">
+            <li>Verified control toolchain producing audit-ready artifacts</li>
+            <li>Offline verifier for air-gapped environments</li>
+            <li>Compliance evidence generator (we map to your frameworks)</li>
+            <li>Deployed in defense, nuclear, and critical infrastructure programs</li>
+          </ul>
+        </div>
+        <div>
+          <h2>What we are not</h2>
+          <ul class="feature-list">
+            <li>Not a certification body (we provide artifacts for assessors)</li>
+            <li>Not a research project (we deploy production systems)</li>
+            <li>Not "AI magic code" without verification (we prove correctness)</li>
+            <li>Not for small shops without compliance burden (ROI requires assurance need)</li>
+      <section id="crosswalk" class="panel">
+        <div class="container">
+          <h2>Compliance Crosswalk (excerpt)</h2>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr><th>Standard</th><th>Control</th><th>Artifact</th><th>Location</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>NRC</td><td>10 CFR 73.54</td><td>Audit log, provenance</td><td>Evidence Pack → Audit/Provenance</td></tr>
+                <tr><td>NERC</td><td>CIP‑005‑8</td><td>Build manifest, hashes</td><td>Evidence Pack → Manifest</td></tr>
+                <tr><td>FIPS</td><td>140‑3 (L3 target)</td><td>Crypto module usage notes</td><td>Capability Statement</td></tr>
+                <tr><td>NIST</td><td>800‑53 CM‑2/CM‑6</td><td>Deterministic build config</td><td>Evidence Pack → Manifest</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="hero-ctas">
+            <a class="btn primary" href="./capability-statement.html">Capability Statement (print‑ready)</a>
+            <a class="btn ghost" href="mailto:greg@smartledger.solutions">Request Full Crosswalk</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="references" class="panel alt">
+        <div class="container">
+          <h2>References</h2>
+          <ul class="feature-list">
+            <li><a href="https://csrc.nist.gov/projects/fips-140-3-transition-effort" rel="noopener">NIST CSRC — FIPS 140‑3 Transition Effort</a></li>
+            <li><a href="https://www.nerc.com/globalassets/standards/reliability-standards/cip/cip-005-8.pdf" rel="noopener">NERC — CIP‑005‑8 Cyber Security (ESP)</a></li>
+            <li><a href="https://www.nrc.gov/reading-rm/doc-collections/cfr/part073/part073-0054" rel="noopener">NRC — 10 CFR 73.54</a></li>
+            <li><a href="https://www.nrc.gov/docs/ML2225/ML22258A204.pdf" rel="noopener">NRC — RG 5.71 (Cyber Security Programs)</a></li>
+            <li><a href="https://www.nrc.gov/docs/ML2305/ML23054A463.pdf" rel="noopener">NRC — RG 1.152 (Programmable Digital Devices)</a></li>
+            <li><a href="https://www.nrc.gov/docs/ML1307/ML13073A210.pdf" rel="noopener">NRC — RG 1.168 (V&V, Reviews, Audits)</a></li>
+          </ul>
+        </div>
+      </section>
+    <section id="overview" class="panel">
+      <div class="container">
+        <div class="kpis">
+          <div class="kpi">
+            <div class="kpi-value">50–70%</div>
+            <div class="kpi-label">V&V Time Reduction</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-value">Air-Gapped</div>
+            <div class="kpi-label">Offline Verification</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-value">WASM + Verilog</div>
+            <div class="kpi-label">Software & Hardware</div>
+          </div>
+          <div class="kpi">
+            <div class="kpi-value">This Quarter</div>
+            <div class="kpi-label">Pilot Ready</div>
+          </div>
+        </div>
+        <div class="cards">
+          <article class="card">
+            <h3>Crash‑Resistant (Verified Subset)</h3>
+            <p>Static stack‑effect and type analysis prevents over/underflow and undefined behavior <em>within the verified subset</em>. Execution is deterministic and allocation‑free.</p>
+          </article>
+          <article class="card">
+            <h3>Hardware & Software Unified</h3>
+            <p>Single source compiles to WebAssembly for universal runtime and synthesizable Verilog for FPGA/ASIC deployment.</p>
+          </article>
+          <article class="card">
+            <h3>Regulator‑Ready Evidence</h3>
+            <p>Cryptographic audit logs, policy metadata, and reproducible artifacts enable independent, offline review by agencies.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="verifier" class="panel alt">
+      <div class="container">
+        <h2>Start Here: Offline Verification & Evidence Toolkit</h2>
+        <p class="subtitle">Deploy audit-ready artifacts <strong>this quarter</strong>—no toolchain migration required. Works with your existing code or SuperForth-generated systems.</p>
+        <div class="cards">
+          <article class="card">
+            <h3>Validate Existing Artifacts</h3>
+            <p>Verify WASM/Verilog builds against audit logs. Check source integrity, signatures, and toolchain metadata offline.</p>
+          </article>
+          <article class="card">
+            <h3>Generate Compliance Crosswalks</h3>
+            <p>Auto-map your artifacts to NRC, NERC, EPA, FIPS, NIST controls. Export structured JSON for filing systems.</p>
+          </article>
+          <article class="card">
+            <h3>Produce Audit-Ready Reports</h3>
+            <p>SLSA provenance, reproducibility manifests, and tamper-evident logs. Independent review without vendor lock-in.</p>
+          </article>
+        </div>
+        <div class="hero-ctas">
+          <a class="btn primary" href="mailto:greg@smartledger.solutions">Request Verifier Demo</a>
+          <a class="btn ghost" href="./evidence/verifier-output.json" download>See Sample Output</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="capabilities" class="panel">
+      <div class="container two-col">
+        <div>
+          <h2>Level 2: Full Verified Toolchain</h2>
+          <p class="muted">Once you've validated artifacts with our verifier, generate verifiable code from day one.</p>
+          <ul class="feature-list">
+            <li><strong>Formal safety</strong>: Verified arithmetic, comparisons, control flow, and boolean logic.</li>
+            <li><strong>Deterministic WAT</strong>: Normalized WebAssembly Text for reproducibility.</li>
+            <li><strong>Silicon‑ready</strong>: Single‑cycle combinational Verilog with timing estimates.</li>
+            <li><strong>Auditability</strong>: SHA‑256/HMAC signatures, policy traceability.</li>
+            <li><strong>Compliance mapping</strong>: NRC (incl. 10 CFR 73.54), NERC CIP‑005‑8, EPA, FIPS 140‑3, NIST 800‑53.</li>
+          </ul>
+          <p class="muted">SuperForth is a verified, stack‑typed control language that compiles to deterministic WASM and synthesizable Verilog, producing audit artifacts suitable for offline review.</p>
+        </div>
+        <div class="diagram" aria-label="Build and verification pipeline">
+          <div class="step">AI Generation</div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="step">Static Verification</div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="step">WASM / Verilog</div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="step">Audit & Provenance</div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="step">Regulatory Review</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="verification" class="panel">
+      <div class="container two-col">
+        <div>
+          <h2>Independent Verification</h2>
+          <p>Our offline CLI validates artifacts against cryptographic audit data, build reproducibility, toolchain metadata, and compliance keywords — without external dependencies.</p>
+          <ul class="feature-list">
+            <li>Source integrity and signature checks</li>
+            <li>Provenance (in‑toto) validation</li>
+            <li>Framework checks: NRC, NERC, EPA, FIPS</li>
+            <li>Structured JSON output for filings</li>
+          </ul>
+          <h3>Assurance Model</h3>
+          <ul class="feature-list">
+            <li>Verified subset (no dynamic allocation, bounded stack, total ops)</li>
+            <li>Reproducible builds (pinned toolchain, hash‑locked manifests)</li>
+            <li>Signed audit logs and provenance metadata</li>
+            <li>Offline verifier for air‑gapped review</li>
+          </ul>
+        </div>
+        <div>
+          <div class="code">
+<pre><code>npm run verify -- ./artifacts/system.wat ./logs/system.audit.json
+# ➜ VERIFICATION PASSED — 6/6 checks</code></pre>
+          </div>
+          <div class="evidence-links">
+            <a class="btn ghost" href="./evidence/sample-audit.json" download>Sample Audit Log</a>
+            <a class="btn ghost" href="./evidence/reproducibility-manifest.json" download>Reproducibility Manifest</a>
+            <a class="btn ghost" href="./evidence/verifier-output.json" download>Verifier Output</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="buyers" class="panel alt">
+      <div class="container">
+        <h2>Who This Is For</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>🛡️ Defense / Gov R&D</h3>
+            <p><strong>Buyers:</strong> Program Managers, Chief Engineers, Cyber/Assurance Leads (A&D primes, DoD labs, federal integrators)</p>
+            <p><strong>Pain:</strong> Need provenance + offline verification for embedded control & FPGA/ASIC security systems</p>
+            <p><strong>Outcome:</strong> Deploy pilots this quarter with SBIR-compatible evidence pipeline</p>
+          </article>
+          <article class="card">
+            <h3>⚛️ Nuclear Digital I&C</h3>
+            <p><strong>Buyers:</strong> Digital I&C Program Managers, Safety Systems Engineering Managers, Licensing/Regulatory leads</p>
+            <p><strong>Pain:</strong> Modernization blocked by recertification risk and V&V cost overruns</p>
+            <p><strong>Outcome:</strong> Reduce V&V time 50–70% with formal verification + audit-ready artifacts (NRC 10 CFR 73.54, RG 5.71, RG 1.152, RG 1.168)</p>
+          </article>
+          <article class="card">
+            <h3>⚡ Electric Grid OT</h3>
+            <p><strong>Buyers:</strong> OT Security Directors, NERC CIP Compliance Managers, P&C Engineering Managers</p>
+            <p><strong>Pain:</strong> "Patch without fear" + change control evidence for NERC CIP-005-8 audits</p>
+            <p><strong>Outcome:</strong> Deterministic updates with tamper-evident logs and compliance crosswalks</p>
+          </article>
+          <article class="card">
+            <h3>💧 Water / SCADA</h3>
+            <p><strong>Buyers:</strong> SCADA/ICS Managers, Utility Operations Directors, integrator Security/Compliance Leads</p>
+            <p><strong>Pain:</strong> Safety monitoring + EPA 40 CFR 141 traceability with limited budgets</p>
+            <p><strong>Outcome:</strong> Fast pilots with "safety monitoring + tamper-evident logging" package</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="provenance" class="panel">
+      <div class="container">
+        <h2>Blockchain‑Anchored Provenance</h2>
+        <p class="subtitle">Every artifact (source → IR → WAT/WASM → Verilog → manifest) is signed with hybrid PQ + ECDSA and anchored to an immutable ledger. Anyone can prove authenticity, timestamp, authorship, and full derivation chain—<strong>without trusting us</strong>.</p>
+        <div class="cards">
+          <article class="card">
+            <h3>Hybrid Signatures</h3>
+            <p>ML‑DSA‑87 (post-quantum) + ECDSA (traditional) on every artifact. Future-proof against cryptanalytic breaks and quantum threats.</p>
+          </article>
+          <article class="card">
+            <h3>Immutable Timestamps</h3>
+            <p>Chain-anchored records prove when code was authorized and deployed. No "I didn't do that" plausible deniability.</p>
+          </article>
+          <article class="card">
+            <h3>Independent Verification</h3>
+            <p>Assessors rebuild artifacts offline and compare hashes to chain anchors. Validates reproducibility without trusting the builder.</p>
+          </article>
+          <article class="card">
+            <h3>Supply-Chain Enforcement</h3>
+            <p>Only artifacts signed by approved keys and anchored to the chain can deploy. Prevents unauthorized hotfixes and version confusion.</p>
+          </article>
+        </div>
+        <div class="hero-ctas">
+          <a class="btn primary" href="mailto:greg@smartledger.solutions">Learn About Chain Integration</a>
+          <a class="btn ghost" href="./evidence/chain-anchor-example.json" download>See Example Anchor</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="docs" class="panel">
+      <div class="container two-col">
+        <div>
+          <h2>Documentation & Briefings</h2>
+          <p>Comprehensive technical documentation, compliance mappings, and deployment guides available upon request.</p>
+          <div class="hero-ctas">
+            <a class="btn primary" href="mailto:greg@smartledger.solutions">Schedule Pilot Discussion</a>
+            <a class="btn ghost" href="./capability-statement.html">Download Capability Statement</a>
+          </div>
+        </div>
+        <div class="bullets">
+          <ul class="feature-list">
+            <li>Technical design (compiler, emitters, verification)</li>
+            <li>Compliance crosswalks (NRC/NERC/EPA/FIPS/NIST)</li>
+            <li>Reproducible build & provenance guides</li>
+            <li>Hardware implementation overview (FPGA/ASIC)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-cta">
+      <div class="container">
+        <h2>Reduce your V&V cost this quarter</h2>
+        <p>Email <a href="mailto:greg@smartledger.solutions">greg@smartledger.solutions</a> for pilot demos, program assessments, and SBIR/procurement pathways.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> SuperForth. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="/site/robots.txt">Robots</a>
+        <a href="/site/.well-known/security.txt">Security.txt</a>
+        <a href="mailto:greg@smartledger.solutions">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./script.js" defer></script>
+</body>
+</html>

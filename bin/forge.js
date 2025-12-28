@@ -3,11 +3,68 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import crypto from 'crypto';
 import { tryCompile } from '../lib/superforth/compiler.js';
 import { emitWAT } from '../lib/superforth/wasmEmitter.js';
 import VerilogEmitter from '../lib/superforth/verilogEmitter.js';
+import { signArtifact } from '../lib/hybridSigner.js';
+import { AnchorRecord, FileLedger } from '../lib/chainLedger.js';
 import wabt from 'wabt';
 import { writeAuditLog } from '../lib/auditLogger.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const LEDGER_DIR = path.join(__dirname, '..', 'ledger');
+const BUILDER_AGENT = process.env.BUILDER_KEY_AGENT || 'builder-ci';
+
+/**
+ * Sign and anchor an artifact to the ledger
+ */
+async function signAndAnchorArtifact(artifactContent, artifactType, policyId = 'default') {
+  try {
+    const hash = crypto.createHash('sha256').update(artifactContent).digest('hex');
+    
+    // Sign the artifact
+    const envelope = await signArtifact(
+      {
+        type: artifactType,
+        hash,
+        metadata: {
+          policy_id: policyId,
+          size: artifactContent.length
+        }
+      },
+      BUILDER_AGENT
+    );
+
+    // Anchor to file ledger
+    const ledger = new FileLedger(LEDGER_DIR);
+    const record = new AnchorRecord(
+      hash,
+      envelope.provenance.signatures,
+      {
+        policy_id: policyId,
+        signer: envelope.provenance.signed_by,
+        artifact_type: artifactType
+      }
+    );
+
+    await ledger.anchor(record);
+    envelope.chain_anchor = {
+      ledger: 'file',
+      recordId: record.id,
+      proof: record.calculateProof(),
+      timestamp: new Date().toISOString()
+    };
+
+    return envelope;
+  } catch (err) {
+    console.warn(`⚠️  Signing/anchoring skipped: ${err.message}`);
+    return null;
+  }
+}
 
 function parseArgs(argv) {
   const args = { 
@@ -25,9 +82,13 @@ function parseArgs(argv) {
   if (['verify','compile','wasm','wasm-run','verilog'].includes(a[0])) args.cmd = a.shift();
   for (let i = 0; i < a.length; i++) {
     const t = a[i];
-    if (t === '--file') args.source = fs.readFileSync(a[++i], 'utf8');
-    else if (t === '--code') args.source = a[++i];
-    else if (t === '--sig') {
+    if (t === '--cmd') {
+      args.cmd = a[++i];
+    } else if (t === '--file') {
+      args.source = fs.readFileSync(a[++i], 'utf8');
+    } else if (t === '--code') {
+      args.source = a[++i];
+    } else if (t === '--sig') {
       const sig = a[++i];
       const parts = sig.split('--');
       args.inSig = parts[0].trim().split(/[\s,]+/).filter(Boolean);
@@ -77,8 +138,29 @@ async function main() {
       } else {
         console.log(wat);
       }
+      
+      // Auto-sign and anchor WAT artifact
+      let signatureEnvelope = null;
+      if (BUILDER_AGENT) {
+        try {
+          signatureEnvelope = await signAndAnchorArtifact(
+            wat,
+            'wat',
+            args.policy || 'default'
+          );
+          if (args.outFile) {
+            const sigFile = `${args.outFile}.sig.json`;
+            fs.writeFileSync(sigFile, JSON.stringify(signatureEnvelope, null, 2), 'utf8');
+            console.log(`✓ Signed WAT: ${sigFile}`);
+            console.log(`  Anchor chain: ${signatureEnvelope.chain_anchor?.timestamp || 'pending'}`);
+          }
+        } catch (sigErr) {
+          console.warn(`⚠ Signing failed (non-fatal): ${sigErr.message}`);
+        }
+      }
+      
       if (args.audit) {
-        const { filePath, buildHash } = writeAuditLog({
+        const auditPayload = {
           command: 'wasm',
           source: args.source,
           signature,
@@ -86,7 +168,13 @@ async function main() {
           outFiles: { wat: args.outFile || null },
           auditDir: args.auditDir,
           policy: args.policy,
-        });
+        };
+        if (signatureEnvelope) {
+          auditPayload.signatures = {
+            envelope: signatureEnvelope,
+          };
+        }
+        const { filePath, buildHash } = writeAuditLog(auditPayload);
         console.log(`Audit log: ${filePath}\nBuild hash: ${buildHash}`);
       }
     } catch (e) {
@@ -119,8 +207,28 @@ async function main() {
       console.log(`  Execution: ${timing.singleCycleExecution ? 'Single cycle' : 'Pipelined'}`);
       console.log(`  Gate Count: ~${timing.gateCount} gates`);
 
+      // Auto-sign and anchor Verilog artifact
+      let signatureEnvelope = null;
+      if (BUILDER_AGENT) {
+        try {
+          signatureEnvelope = await signAndAnchorArtifact(
+            verilog,
+            'verilog',
+            args.policy || 'default'
+          );
+          if (args.outFile) {
+            const sigFile = `${args.outFile}.sig.json`;
+            fs.writeFileSync(sigFile, JSON.stringify(signatureEnvelope, null, 2), 'utf8');
+            console.log(`✓ Signed Verilog: ${sigFile}`);
+            console.log(`  Anchor chain: ${signatureEnvelope.chain_anchor?.timestamp || 'pending'}`);
+          }
+        } catch (sigErr) {
+          console.warn(`⚠ Signing failed (non-fatal): ${sigErr.message}`);
+        }
+      }
+
       if (args.audit) {
-        const { filePath, buildHash } = writeAuditLog({
+        const auditPayload = {
           command: 'verilog',
           source: args.source,
           signature,
@@ -129,7 +237,13 @@ async function main() {
           outFiles: { v: args.outFile || null },
           auditDir: args.auditDir,
           policy: args.policy,
-        });
+        };
+        if (signatureEnvelope) {
+          auditPayload.signatures = {
+            envelope: signatureEnvelope,
+          };
+        }
+        const { filePath, buildHash } = writeAuditLog(auditPayload);
         console.log(`Audit log: ${filePath}\nBuild hash: ${buildHash}`);
       }
     } catch (e) {
@@ -142,6 +256,22 @@ async function main() {
       const wabtModule = await wabt();
       const parsed = wabtModule.parseWat('module.wat', wat);
       const { buffer } = parsed.toBinary({ log: false, write_debug_names: false });
+      
+      // Auto-sign WAT before execution
+      let signatureEnvelope = null;
+      if (BUILDER_AGENT) {
+        try {
+          signatureEnvelope = await signAndAnchorArtifact(
+            wat,
+            'wat',
+            args.policy || 'default'
+          );
+          console.log(`✓ Signed WAT (execution trace): ${signatureEnvelope.artifact?.hash?.substring(0, 8)}...`);
+        } catch (sigErr) {
+          console.warn(`⚠ Signing failed (non-fatal): ${sigErr.message}`);
+        }
+      }
+      
       if (args.outFile) {
         fs.writeFileSync(args.outFile, Buffer.from(buffer), 'binary');
         console.log(`Wrote WASM to ${args.outFile}`);
@@ -156,7 +286,7 @@ async function main() {
       const result = fn(...args.runArgs);
       console.log('Result:', result);
       if (args.audit) {
-        const { filePath, buildHash } = writeAuditLog({
+        const auditPayload = {
           command: 'wasm-run',
           source: args.source,
           signature,
@@ -167,7 +297,13 @@ async function main() {
           outFiles: { wasm: args.outFile || null },
           auditDir: args.auditDir,
           policy: args.policy,
-        });
+        };
+        if (signatureEnvelope) {
+          auditPayload.signatures = {
+            envelope: signatureEnvelope,
+          };
+        }
+        const { filePath, buildHash } = writeAuditLog(auditPayload);
         console.log(`Audit log: ${filePath}\nBuild hash: ${buildHash}`);
       }
     } catch (e) {
@@ -175,18 +311,42 @@ async function main() {
       process.exit(1);
     }
   } else {
+    // Default: verify (parse and check)
+    // Default: verify (parse and check)
     const res = tryCompile(args.source, signature);
     if (res.ok) {
       console.log('Verified: OK');
+      
+      // Auto-sign source code on successful verification
+      let signatureEnvelope = null;
+      if (BUILDER_AGENT) {
+        try {
+          signatureEnvelope = await signAndAnchorArtifact(
+            args.source,
+            'sf',
+            args.policy || 'default'
+          );
+          console.log(`✓ Signed verified SuperForth: ${signatureEnvelope.artifact?.hash?.substring(0, 8)}...`);
+        } catch (sigErr) {
+          console.warn(`⚠ Signing failed (non-fatal): ${sigErr.message}`);
+        }
+      }
+      
       if (args.audit) {
-        const { filePath, buildHash } = writeAuditLog({
+        const auditPayload = {
           command: 'verify',
           source: args.source,
           signature,
           outFiles: {},
           auditDir: args.auditDir,
           policy: args.policy,
-        });
+        };
+        if (signatureEnvelope) {
+          auditPayload.signatures = {
+            envelope: signatureEnvelope,
+          };
+        }
+        const { filePath, buildHash } = writeAuditLog(auditPayload);
         console.log(`Audit log: ${filePath}\nBuild hash: ${buildHash}`);
       }
     } else {

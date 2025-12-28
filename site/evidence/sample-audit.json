@@ -1,0 +1,15 @@
+{
+  "sourceHash": "sha256-EXAMPLE",
+  "build": {
+    "toolchain": "node18+wabt1.0.39",
+    "deterministic": true,
+    "timestamp": "2025-12-27T00:00:00Z"
+  },
+  "policy": {
+    "frameworks": ["NRC 10 CFR 50", "NRC 10 CFR 73.54", "NERC CIP-005-8", "EPA 40 CFR 141", "FIPS 140-3", "NIST 800-53"]
+  },
+  "signature": {
+    "algorithm": "HMAC-SHA256",
+    "signed": true
+  }
+}

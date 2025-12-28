@@ -1,0 +1,12 @@
+{
+  "wabtVersion": "1.0.39",
+  "nodeVersion": "18.x",
+  "inputs": ["system.sf"],
+  "outputs": ["system.wat", "system.wasm"],
+  "flags": ["--deterministic"],
+  "hashes": {
+    "system.sf": "sha256-EXAMPLE",
+    "system.wat": "sha256-EXAMPLE",
+    "system.wasm": "sha256-EXAMPLE"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "checks": [
+    {"name":"Source integrity","status":"pass"},
+    {"name":"Build reproducibility","status":"pass"},
+    {"name":"Toolchain metadata","status":"pass"},
+    {"name":"Signature validation","status":"pass"},
+    {"name":"Compliance keywords","status":"pass"},
+    {"name":"Provenance predicate","status":"pass"}
+  ],
+  "summary": "VERIFICATION PASSED — 6/6 checks"
+}
