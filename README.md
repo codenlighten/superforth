@@ -5,7 +5,7 @@
 > **Every Artifact Locked to Its Trace**  
 > Assured by Design. Proven in Evidence.
 
-AxiomSure is a minimalist stack-based language with a strict static analyzer that enables **AI to write crash-proof, government-grade code**. Every program is verified before execution, and every build is cryptographically auditable.
+AxiomSure is a minimalist stack-based language with a strict static analyzer. Every program is verified before execution, and every build is cryptographically auditable.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
@@ -18,7 +18,7 @@ Traditional AI code generation is unreliable. AxiomSure changes this:
 ✅ **AI-Driven** - Convergence loop generates correct code automatically  
 ✅ **Zero Crashes** - Impossible to overflow, underflow, or type-confuse  
 ✅ **Cryptographically Auditable** - Every build is reproducible and signed  
-✅ **Government-Grade** - NIST 800-53 compliant audit trails built-in  
+✅ **Audit trails** - Built-in audit logging (see below)  
 ✅ **WebAssembly Native** - Compiles to WASM for universal execution  
 
 ## Quick Start
@@ -118,7 +118,7 @@ node bin/forge.js wasm-run \
 # Output: Result: 10
 ```
 
-#### Audit Logging (Government-Grade)
+#### Audit Logging
 
 ```bash
 node bin/forge.js wasm-run \
@@ -209,7 +209,7 @@ AxiomSure is designed for **high-assurance environments**:
 
 - **Deterministic Builds:** Same source → same binary hash (verified per commit)
 - **Audit Trails:** Every build is logged with cryptographic hashes
-- **Supply Chain Security:** **SLSA Level 3 compliant** (Hermetic Build + Provenance)
+- **Supply Chain Security:** Hermetic build + provenance
 - **Regulatory Alignment:** NIST 800-53, FedRAMP, CIS Benchmarks
 
 ### SLSA Supply Chain Integrity
@@ -258,7 +258,7 @@ node bin/forge.js verilog \
 ### Hardware Features
 
 ✅ **Deterministic Execution** - Single-cycle combinatorial logic (< 10ns)  
-✅ **Crash-Proof** - Zero memory allocation, bounded execution  
+✅ **Bounded resources** - No heap allocation, bounded execution  
 ✅ **Formally Verifiable** - SMT solver compatible (Yosys + Z3)  
 ✅ **Silicon-Locked** - Immune to firmware exploits  
 ✅ **Multi-Platform** - Xilinx, Intel, TSMC, Samsung, GloFo
@@ -280,7 +280,7 @@ See [docs/HARDWARE-IMPLEMENTATION.md](docs/HARDWARE-IMPLEMENTATION.md) for:
 
 - **Critical Infrastructure** (nuclear, power grids, water treatment) ✅ **Demonstrated**
 - **Financial Systems** (smart contracts, trading algorithms)
-- **Medical Devices** (FDA-compliant firmware)
+- **Medical devices** (potential use case)
 - **Defense & Aerospace** (missile guidance, satellite control)
 - **Autonomous Systems** (verified decision logic)
 
