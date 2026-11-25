@@ -1,5 +1,7 @@
 # AxiomSure
 
+> **Status: experimental.** Claims in this README about scale, speed, security or readiness are design goals or earlier drafts unless they point to a test, measurement or audit report. No independent audit is claimed.
+
 > **Every Artifact Locked to Its Trace**  
 > Assured by Design. Proven in Evidence.
 
